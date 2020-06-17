@@ -26,7 +26,7 @@ describe('Things Endpoints', function () {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe.only(`Protected endpoints`, () => {
+  describe(`Protected endpoints`, () => {
     beforeEach('insert things', () =>
       helpers.seedThingsTables(
         db,
@@ -43,7 +43,7 @@ describe('Things Endpoints', function () {
       },
       {
         name: 'GET /api/things/:thing_id/reviews',
-        path: '/api/things/1/comments'
+        path: '/api/things/1/reviews'
       },
     ]
 
@@ -215,7 +215,7 @@ describe('Things Endpoints', function () {
   describe(`GET /api/things/:thing_id/reviews`, () => {
     context(`Given no things`, () => {
       beforeEach(() =>
-        db.into('blogful_users').insert(testUsers)
+        db.into('thingful_users').insert(testUsers)
       )
       it(`responds with 404`, () => {
         const thingId = 123456
