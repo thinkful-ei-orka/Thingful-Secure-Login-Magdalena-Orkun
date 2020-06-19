@@ -9,27 +9,26 @@ function requireAuth(req, res, next) {
     if (!authToken.toLowerCase().startsWith('basic ')) {
         return res.status(401).json({ error: 'Missing basic token' })
     } else {
-        basicToken = authToken.slice('basic '.length, authToken.length)
+        basicToken = authToken.slice('basic'.length, authToken.length)
     }
 
     // Parsing Basic Token
-    const [tokenUserName, tokenPassword] = Buffer
-        .from(basicToken, 'base64')
-        .toString()
-        .split(':')
-
+    const [tokenUserName, tokenPassword] = AuthService.parseBasicToken(basicToken)
+        
     if (!tokenUserName || !tokenPassword) {
         return res.status(401).json({ error: 'Unauthorized request' })
     }
 
-    // Get User with User Name
-    req.app.get('db')('thingful_users')
-        .where({ user_name: tokenUserName })
-        .first()
+    AuthService.getUserWithUserName(
+        req.app.get('db'),
+        ('thingful_users')
+    )
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: 'Unauthorized request' })
             }
+
+
             return AuthService.comparePasswords(tokenPassword, user.password)
                 .then(passwordsMatch => {
                     if (!passwordsMatch) {

@@ -4,7 +4,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const jwt = require('jsonwebtoken')
 
-describe.only('Auth Endpoints', function () {
+describe('Auth Endpoints', function () {
     let db
 
     const { testUsers } = helpers.makeThingsFixtures()
